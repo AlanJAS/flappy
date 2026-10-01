@@ -20,9 +20,13 @@
 # Contact information:
 # Alan Aguiar alanjas@hotmail.com
 
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gtk_present = True
+try:
+    import gi
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk
+except (ImportError, ValueError):
+    gtk_present = False
 
 import pygame
 from sugar3.graphics.style import GRID_CELL_SIZE
@@ -167,8 +171,9 @@ class Flappy():
         self.state = INIT
         self.running = True
         while self.running:
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+            if gtk_present:
+                while Gtk.events_pending():
+                    Gtk.main_iteration()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
