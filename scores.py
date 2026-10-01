@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+from resources import loadFont
 from gettext import gettext as _
 
-back = pygame.image.load('data/images/score_alfa.png')
-mes = pygame.image.load('data/images/init_alfa.png')
+
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -35,14 +35,15 @@ def text_with_outline(font, text, fg_color, outline_color, thickness):
 
 class EndScore(pygame.sprite.Sprite):
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, parent, x=0, y=0):
         pygame.sprite.Sprite.__init__(self)
+        self.parent = parent
         self.mPos = [x, y]
         self.score = 0
         self.best = 0
-        self.font15 = pygame.font.Font('data/minercraftory.regular.ttf', 15)
-        self.font23 = pygame.font.Font('data/minercraftory.regular.ttf', 23)
-        self.font25 = pygame.font.Font('data/minercraftory.regular.ttf', 25)
+        self.font15 = loadFont('minercraftory.regular.ttf', 15)
+        self.font23 = loadFont('minercraftory.regular.ttf', 23)
+        self.font25 = loadFont('minercraftory.regular.ttf', 25)
         self.fgColor = WHITE
         self.mes_color = ORANGE
         self.mes_score = _('Score')
@@ -56,7 +57,7 @@ class EndScore(pygame.sprite.Sprite):
         self._update_image()
 
     def _update_image(self):
-        self.image = back.copy()
+        self.image = self.parent._back.copy()
         w = self.image.get_width()
         # score
         fontSurface = self.font15.render(self.mes_score, True, self.mes_color)
@@ -95,9 +96,9 @@ class CurrentScore(pygame.sprite.Sprite):
         self.parent = parent
         self.mPos = [x, y]
         self.points = 0
-        self.image = back
+        self.image = self.parent._back
         self.size = [50, 60]
-        self.font = pygame.font.Font('data/minercraftory.regular.ttf', 40)
+        self.font = loadFont('minercraftory.regular.ttf', 40)
         self.fgColor = WHITE
         self.bgColor = (113, 197, 207)
         self._update_image()
@@ -123,10 +124,11 @@ class CurrentScore(pygame.sprite.Sprite):
 
 class Message(pygame.sprite.Sprite):
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, parent, x=0, y=0):
         pygame.sprite.Sprite.__init__(self)
+        self.parent = parent
         self.mPos = [x, y]
-        self.image = mes
+        self.image = self.parent._mes
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
         self.rect.y = self.mPos[1]

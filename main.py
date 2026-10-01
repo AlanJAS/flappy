@@ -94,14 +94,16 @@ class Flappy():
         # load once reused images
         self._pipe_head = loadImage('head_pipe.png')
         self._pipe_body = loadImage('pipe.png')
+        self._back = loadImage('score_alfa.png')
+        self._mes = loadImage('init_alfa.png')
         #######################################################################
         self.background = Background(self, self._factor)
         self.background.mVel = 0
         self.floor = Floor(0, self.floor_y, self.game_w)
         self.floor.mVel = 0
         self.bird = Bird(self, self._factor, self.bird_x, self.bird_y)
-        self.end_scores = EndScore(self.end_s_x, 200)
-        self.message = Message(self.mes_x, self.mes_y)
+        self.end_scores = EndScore(self, self.end_s_x, 200)
+        self.message = Message(self, self.mes_x, self.mes_y)
         self.currentS = CurrentScore(self, self.sc_x, 100)
         #######################################################################
         self.sprites.add(self.background, layer=-1)
