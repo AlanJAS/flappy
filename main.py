@@ -59,6 +59,8 @@ PAUSE = 3
 INIT_BIRD_SPEED = 8
 FPS = 30
 
+GAME_SIZE = (400, 900)
+
 
 class Flappy():
 
@@ -232,9 +234,10 @@ class Flappy():
 
 
 if __name__ == "__main__":
-    pygame.display.init()
-    pygame.font.init()
+    pygame.init()
     g = Flappy()
-    GAME_SIZE = (400, 900)
-    g.screen = pygame.display.set_mode(GAME_SIZE)
-    g.run()
+    try:
+        g.run()
+    finally:
+        pygame.quit()
+
