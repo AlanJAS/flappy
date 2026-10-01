@@ -32,3 +32,9 @@ def loadSound(name, volume=0.5):
     sound.set_volume(volume)
     return sound
 
+def loadFont(name, size):
+    path = os.path.join(DATA_DIR, name)
+    if not os.path.exists(path):
+        return None
+    font = pygame.font.Font(path, size)
+    return font
