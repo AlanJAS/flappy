@@ -27,6 +27,8 @@ from gi.repository import Gtk
 import pygame
 from sugar3.graphics.style import GRID_CELL_SIZE
 
+from resources import loadSound
+
 from floor import Floor
 from pipe import Pipe_I
 from pipe import Pipe_S
@@ -152,12 +154,9 @@ class Flappy():
         self.sound_enable = True
         try:
             pygame.mixer.init()
-            self._snd_pipe = pygame.mixer.Sound('data/sounds/pipe.ogg')
-            self._snd_pipe.set_volume(0.5)
-            self._snd_bird = pygame.mixer.Sound('data/sounds/bird.ogg')
-            self._snd_bird.set_volume(0.5)
-            self._snd_hit = pygame.mixer.Sound('data/sounds/hit.ogg')
-            self._snd_hit.set_volume(0.15)
+            self._snd_pipe = loadSound('pipe.ogg', 0.5)
+            self._snd_bird = loadSound('bird.ogg', 0.5)
+            self._snd_hit = loadSound('hit.ogg', 0.15)
         except BaseException:
             self.sound_enable = False
         self.load_all()
