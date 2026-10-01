@@ -4,10 +4,6 @@
 import pygame
 import random
 
-head = pygame.image.load('data/images/head_pipe.png')
-body = pygame.image.load('data/images/pipe.png')
-
-
 class Pipe_I(pygame.sprite.Sprite):
 
     def __init__(self, parent, x, height, factor):
@@ -25,9 +21,9 @@ class Pipe_I(pygame.sprite.Sprite):
         self.image = pygame.surface.Surface((91, self.height), 0)
         self.mask = pygame.mask.from_surface(self.image)
         self.image.fill((255, 255, 255))
-        self.image.blit(head, (0, 0))
+        self.image.blit(self.parent._pipe_head, (0, 0))
         for i in range(self.p):
-            self.image.blit(body, (4, 42 + i * 40))
+            self.image.blit(self.parent._pipe_body, (4, 42 + i * 40))
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]
@@ -87,8 +83,8 @@ class Pipe_S(pygame.sprite.Sprite):
         self.image.fill((255, 255, 255))
 
         for i in range(self.p):
-            self.image.blit(body, (4, i * 40))
-        self.image.blit(head, (0, self.p * 40))
+            self.image.blit(self.parent._pipe_body, (4, i * 40))
+        self.image.blit(self.parent._pipe_head, (0, self.p * 40))
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = self.mPos[0]

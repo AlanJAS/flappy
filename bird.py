@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+from resources import loadImage
 
 
 class Bird(pygame.sprite.Sprite):
@@ -18,8 +19,7 @@ class Bird(pygame.sprite.Sprite):
         self.counter = 0
         self.count_flap = 0
         for num in range(3):
-            img = pygame.image.load(
-                f"data/images/bird_{num}.png").convert_alpha()
+            img = loadImage(f"bird_{num}.png")
             self.images.append(img)
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()

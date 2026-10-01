@@ -27,7 +27,7 @@ from gi.repository import Gtk
 import pygame
 from sugar3.graphics.style import GRID_CELL_SIZE
 
-from resources import loadSound
+from resources import loadSound, loadImage
 
 from floor import Floor
 from pipe import Pipe_I
@@ -91,6 +91,10 @@ class Flappy():
         self.sprites = pygame.sprite.LayeredUpdates()
         self.tubes = pygame.sprite.LayeredUpdates()
         #######################################################################
+        # load once reused images
+        self._pipe_head = loadImage('head_pipe.png')
+        self._pipe_body = loadImage('pipe.png')
+        #######################################################################
         self.background = Background(self, self._factor)
         self.background.mVel = 0
         self.floor = Floor(0, self.floor_y, self.game_w)
@@ -139,8 +143,6 @@ class Flappy():
                     (event.size[0], event.size[1] - GRID_CELL_SIZE),
                     pygame.RESIZABLE)
                 break
-        pygame.display.init()
-        pygame.font.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
         if self.screen:
@@ -223,6 +225,8 @@ class Flappy():
 
 
 if __name__ == "__main__":
+    pygame.display.init()
+    pygame.font.init()
     g = Flappy()
     GAME_SIZE = (400, 900)
     g.screen = pygame.display.set_mode(GAME_SIZE)

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-
-piece = pygame.image.load('data/images/floor.png')
-
+from resources import loadImage
 
 class Floor(pygame.sprite.Sprite):
 
@@ -14,6 +12,7 @@ class Floor(pygame.sprite.Sprite):
         self.p = large // 66 + 2
         self.large = self.p * 66
         self.image = pygame.surface.Surface((self.large, 16), 0)
+        piece = loadImage('floor.png')
         for i in range(self.p):
             self.image.blit(piece, (i * 66, 0))
         self.rect = self.image.get_rect()

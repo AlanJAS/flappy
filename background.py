@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+from resources import loadImage
 
 SKY = (113, 197, 207)
 GROUND = (221, 216, 148)
-BUILDINGS_PATH = 'data/images/buildings.png'
 
 
 class Background(pygame.sprite.Sprite):
@@ -14,7 +14,7 @@ class Background(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.pos_x = 0
 
-        bg_image = pygame.image.load(BUILDINGS_PATH).convert()
+        bg_image = loadImage('buildings.png')
         self.bg_width = bg_image.get_width()
 
         # scale_factor for bg to match window
