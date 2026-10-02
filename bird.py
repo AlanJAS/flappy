@@ -24,6 +24,7 @@ class Bird(pygame.sprite.Sprite):
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.y = float(self.rect.centery)
         self.mask = pygame.mask.from_surface(self.image)
 
     # handle the animation
@@ -39,31 +40,30 @@ class Bird(pygame.sprite.Sprite):
             self.image = self.images[self.index]
 
     def update(self):
-        if self.parent.state == 0 or self.parent.state == 1:
+        if self.parent.state in (0, 1):
             self.wing_flap()
         if self.parent.state != 0:
             # handle velocity
             self.counter += 1
             if self.counter > 5:
                 self.mVel -= self.acceleration
-            if self.mVel < self.velocity_limit:
-                self.mVel = self.velocity_limit
+            self.mVel = max(self.mVel, self.velocity_limit)
+            self.y -= self.mVel
 
-            # prevents bird from falling through floor after collision
-            if self.rect.bottom > self.parent.floor_y:
-                self.rect.y += int(self.mVel)
-
-            # handle rotation
-            self.image = pygame.transform.rotate(
-                self.images[self.index], self.mVel * 2 / self.factor)
+            if self.parent.state == 2:
+                angle = -90
+            else:
+                angle = self.mVel * 2 / self.factor
+            self.image = pygame.transform.rotate(self.images[self.index], angle)
+            # Rotation changes the surface dimensions. Keep its center and rebuild
+            # both the rect and mask from the same image used for drawing.
+            self.rect = self.image.get_rect(center=(self.rect.centerx, round(self.y)))
+            if self.rect.top < 0:
+                self.rect.top = 0
+                self.y = float(self.rect.centery)
+            if self.parent.state == 2 and self.rect.bottom >= self.parent.floor_y:
+                self.rect.bottom = self.parent.floor_y
+                self.y = float(self.rect.centery)
+                self.mVel = 0
             self.mask = pygame.mask.from_surface(self.image)
 
-            # handle bird y position
-            self.rect.y -= int(self.mVel)
-            if self.rect.y < 0:
-                self.rect.y = 0
-
-            # rotates bird after collision
-            if self.parent.state == 2:
-                self.image = pygame.transform.rotate(
-                    self.images[self.index], -90)
