@@ -1,0 +1,6 @@
+flappy (7) unstable; urgency=medium
+
+  * Package the standalone version with a desktop launcher and icon.
+  * Install private Python modules and bundled assets in /usr/share/flappy.
+
+ -- Alan Aguiar <alanjas@hotmail.com>  Fri, 02 Oct 2026 12:44:58 -0300

@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with python3
+
+# setup.py is Sugar's bundle builder, not a setuptools project.
+override_dh_auto_configure:
+override_dh_auto_build:
+override_dh_auto_clean:
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	desktop-file-validate debian/flappy.desktop
+endif
+
+override_dh_auto_install:
+
+# dh_install handles the application and assets; install renamed files here.
+execute_after_dh_install:
+	install -D -m 755 debian/flappy.sh debian/flappy/usr/bin/flappy
+	install -D -m 644 activity/flappy.svg debian/flappy/usr/share/icons/hicolor/scalable/apps/flappy.svg
+
+override_dh_python3:
+	dh_python3 /usr/share/flappy

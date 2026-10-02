@@ -1,0 +1,9 @@
+main.py usr/share/flappy
+bird.py usr/share/flappy
+pipe.py usr/share/flappy
+floor.py usr/share/flappy
+background.py usr/share/flappy
+scores.py usr/share/flappy
+resources.py usr/share/flappy
+data usr/share/flappy
+debian/flappy.desktop usr/share/applications

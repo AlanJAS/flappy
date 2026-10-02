@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Flappy
+Comment=Fly between pipes and avoid obstacles
+Comment[es]=Vuela entre tuberías y evita los obstáculos
+Exec=flappy
+TryExec=flappy
+Icon=flappy
+Terminal=false
+Categories=Game;ArcadeGame;
+Keywords=bird;pipes;arcade;
+StartupNotify=false
