@@ -59,7 +59,6 @@ class Activity(activity.Activity):
             def callback(source):
                 if source.get_active():
                     self.game.set_level(numeric_level)
-                    self.game.run()
 
             button.connect('clicked', callback)
             button.set_tooltip(tooltip)
