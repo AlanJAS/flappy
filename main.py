@@ -69,6 +69,8 @@ class Flappy():
         self.sound = True
         self.level = 3  # Default: 3 for hard
         self._factor = 1  # Default: 1 for hard
+        self.game_w = GAME_SIZE[0]
+        self.game_h = GAME_SIZE[1]
 
     def increment_score(self):
         self.score = self.score + 1
@@ -78,8 +80,6 @@ class Flappy():
 
     def load_all(self):
         self.hit_flag = False
-        self.game_w = GAME_SIZE[0]
-        self.game_h = GAME_SIZE[1]
         self.floor_y = self.game_h - FLOOR_Y
         self.bird_x = self.game_w / 3 - FLOOR_Y
         self.bird_y = self.game_h / 2
