@@ -59,11 +59,13 @@ INIT_BIRD_SPEED = 8
 FPS = 30
 
 GAME_SIZE = (400, 900)
+MIN_SIZE = (320, MIN_HEIGHT + 160)
 
 
 class Flappy():
 
     def __init__(self):
+        self.running = False
         self.state = INIT
         self.best_scores = [0, 0, 0]
         self.sound = True
@@ -117,8 +119,36 @@ class Flappy():
         self.sprites.add(self.message, layer=3)
 
     def set_level(self, level):
+        if level not in (1, 2, 3):
+            raise ValueError("level must be 1, 2 or 3")
+        if level == self.level:
+            return
         self.level = level
         self._factor = self.level / 3.0
+        if self.running:
+            self.state = INIT
+            self.load_all()
+
+    def resize(self, size):
+        # Sugar's configure event describes the whole activity, including its
+        # toolbar. Use the actual canvas allocation after pumping GTK events.
+        canvas = getattr(self, 'canvas', None)
+        if canvas is not None:
+            allocation = canvas.get_allocation()
+            size = (allocation.width, allocation.height)
+        if size[0] <= 0 or size[1] <= 0:
+            return
+        # Keep enough room for both pipes and the gap, even in a tiny window.
+        size = (max(MIN_SIZE[0], size[0]), max(MIN_SIZE[1], size[1]))
+        if (size == (self.game_w, self.game_h) and
+                pygame.display.get_surface().get_size() == size):
+            return
+        self.screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+        if canvas is not None:
+            canvas._screen = self.screen  # Keep Sugar previews in sync.
+        self.game_w, self.game_h = self.screen.get_size()
+        self.state = INIT
+        self.load_all()
 
     def load_game(self):
         pipe1 = Pipe_I(self, self.game_w, PIPE_IH, self._factor)
@@ -144,6 +174,8 @@ class Flappy():
         return sprite1.mask.overlap(sprite2.mask, offset) is not None
 
     def run(self):
+        if self.running:
+            return
         pygame.display.init()
         pygame.font.init()
         self.clock = pygame.time.Clock()
@@ -151,7 +183,7 @@ class Flappy():
         if self.screen:
             self.game_w, self.game_h = self.screen.get_size()
         else:
-            self.screen = pygame.display.set_mode(GAME_SIZE)
+            self.screen = pygame.display.set_mode(GAME_SIZE, pygame.RESIZABLE)
             pygame.display.set_caption('Flappy')
         self.sound_enable = True
         try:
@@ -169,9 +201,14 @@ class Flappy():
             if gtk_present:
                 while Gtk.events_pending():
                     Gtk.main_iteration()
+            if not self.running:
+                break
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    break
+                elif event.type == pygame.VIDEORESIZE:
+                    self.resize(event.size)
                 elif event.type == pygame.MOUSEBUTTONDOWN or (
                     event.type == pygame.KEYDOWN and
                     event.key in (pygame.K_SPACE, pygame.K_UP)):
@@ -195,6 +232,8 @@ class Flappy():
                         elif self.state == PLAY:
                             self.state = PAUSE
 
+            if not self.running:
+                break
             if self.state == PAUSE:
                 self.clock.tick(FPS)
                 continue
