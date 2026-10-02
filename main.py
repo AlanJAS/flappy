@@ -29,7 +29,6 @@ except (ImportError, ValueError):
     gtk_present = False
 
 import pygame
-from sugar3.graphics.style import GRID_CELL_SIZE
 
 from resources import loadSound, loadImage
 
@@ -143,21 +142,10 @@ class Flappy():
         return sprite1.mask.overlap(sprite2.mask, offset) is not None
 
     def run(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            elif event.type == pygame.VIDEORESIZE:
-                pygame.display.set_mode(
-                    (event.size[0], event.size[1] - GRID_CELL_SIZE),
-                    pygame.RESIZABLE)
-                break
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
         if self.screen:
-            w = self.screen.get_width()
-            h = self.screen.get_height()
-            global GAME_SIZE
-            GAME_SIZE = [w, h]
+            self.game_w, self.game_h = self.screen.get_size()
         else:
             self.screen = pygame.display.set_mode(GAME_SIZE)
             pygame.display.set_caption('Flappy')
@@ -169,6 +157,7 @@ class Flappy():
             self._snd_hit = loadSound('hit.ogg', 0.15)
         except BaseException:
             self.sound_enable = False
+        # cargo todo
         self.load_all()
         self.state = INIT
         self.running = True
