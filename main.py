@@ -136,12 +136,16 @@ class Flappy():
         self.sprites.remove(self.message)
 
     def check_collision(self, sprite1, sprite2):
+        if not sprite1.rect.colliderect(sprite2.rect):
+            return False
         x_offset = sprite2.rect.x - sprite1.rect.x
         y_offset = sprite2.rect.y - sprite1.rect.y
         offset = (x_offset, y_offset)
         return sprite1.mask.overlap(sprite2.mask, offset) is not None
 
     def run(self):
+        pygame.display.init()
+        pygame.font.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
         if self.screen:
@@ -155,7 +159,7 @@ class Flappy():
             self._snd_pipe = loadSound('pipe.ogg', 0.5)
             self._snd_bird = loadSound('bird.ogg', 0.5)
             self._snd_hit = loadSound('hit.ogg', 0.15)
-        except BaseException:
+        except (pygame.error, OSError):
             self.sound_enable = False
         # cargo todo
         self.load_all()
@@ -169,11 +173,8 @@ class Flappy():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN or (
-                    event.type == pygame.KEYDOWN and any((
-                        event.key == pygame.K_SPACE,
-                        event.key == pygame.K_UP
-                    ))
-                ):
+                    event.type == pygame.KEYDOWN and
+                    event.key in (pygame.K_SPACE, pygame.K_UP)):
                     if self.state == INIT:
                         self.state = PLAY
                         self.load_game()
@@ -195,14 +196,15 @@ class Flappy():
                             self.state = PAUSE
 
             if self.state == PAUSE:
+                self.clock.tick(FPS)
                 continue
 
             self.sprites.update()
             self.sprites.draw(self.screen)
 
-            col = [sprite for sprite in self.tubes if self.check_collision(
-                self.bird, sprite)]
-            if col != []:
+            if self.state == PLAY and any(
+                    self.check_collision(self.bird, sprite)
+                    for sprite in self.tubes):
                 if self.sound_enable and self.sound and not self.hit_flag:
                     self._snd_hit.play()
                     self.hit_flag = True
