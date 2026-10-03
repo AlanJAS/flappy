@@ -1,7 +1,7 @@
 What is this?
 =============
 
-Flappy is an arcade game for the Sugar desktop.
+Flappy is an arcade game that can run standalone or as an activity for the Sugar desktop.
 
 ![Screenshot](screenshots/flappy.png)
 
@@ -25,14 +25,24 @@ On Sugar desktop systems;
 How to run?
 =================
 
-Flappy depends on Python, PyGTK and PyGame.
+The standalone game only requires Python 3 and Pygame (`python3` and
+`python3-pygame`). Sugar is not required.
 
-Flappy is started by [Sugar](https://github.com/sugarlabs/sugar).
+**Debian/Ubuntu package**
 
-Flappy is not packaged by Debian, Ubuntu and Fedora distributions.  
-On Ubuntu and Debian systems these required dependencies (`gir1.2-gtk-3.0` and
-`python3-pygame-sdl2`) need to be manually installed.
-On Fedora system these dependencies (`gtk3` and `python3-pygame`) need to be manually installed.
+A `.deb` package for Debian/Ubuntu is available from the
+[Flappy PPA on Launchpad](https://launchpad.net/~alanjas/+archive/ubuntu/flappy).
+
+On Ubuntu, add the PPA and install the game:
+
+```sh
+sudo add-apt-repository ppa:alanjas/flappy
+sudo apt update
+sudo apt install flappy
+```
+
+On Debian, download a compatible `.deb` package from the Launchpad page and
+install it with `sudo apt install ./<downloaded-package>.deb`.
 
 
 **Running outside Sugar**
@@ -43,13 +53,13 @@ On Fedora system these dependencies (`gtk3` and `python3-pygame`) need to be man
 On Debian and Ubuntu systems;
 
 ```
-sudo apt install gir1.2-gtk-3.0 python3-pygame-sdl2
+sudo apt install python3 python3-pygame
 ```
 
 On Fedora systems;
 
 ```
-sudo dnf install gtk3 python3-pygame
+sudo dnf install python3 python3-pygame
 ```
 
 - Clone the repo and run-
